@@ -8,7 +8,7 @@ namespace SalesOutOrderMagetPrint.DB
         private string _result;
 
         /// <summary>
-        /// 查询生成报表记录
+        /// 查询明细记录
         /// </summary>
         /// <returns></returns>
         public string Get_SalOut(string fidlist)
@@ -84,6 +84,7 @@ namespace SalesOutOrderMagetPrint.DB
         public string Get_Search(string firstcustomerName, string seconCustomerName,DateTime sdt,DateTime edt)
         {
             _result = $@"
+                            
                             SELECT a.FID,a.FBILLNO 单据编号,a.FDATE 单据日期,
 	                               x.FNUMBER 一级客户编码,x1.FNAME 一级客户名称,
 	                               y.FNUMBER 二级客户编码,y1.FNAME 二级客户名称,
@@ -116,10 +117,9 @@ namespace SalesOutOrderMagetPrint.DB
 
                             WHERE (a.FDATE>='{sdt}')   --起始单据日期
                             AND (a.FDATE<='{edt}')     --结束单据日期
-                            AND (x1.FNAME LIKE '%{firstcustomerName}%' or '{firstcustomerName}' is null)      --一级客户名称
-                            AND (y1.FNAME LIKE '%'{seconCustomerName}'%' or '{seconCustomerName}' is null)      --二级客户名称
+                            AND ((x1.FNAME LIKE '%{firstcustomerName}%' or '{firstcustomerName}' is null)         --一级客户名称
+								OR (y1.FNAME LIKE '%{seconCustomerName}%' or '{seconCustomerName}' is null))      --二级客户名称
                             AND a.FDOCUMENTSTATUS='C'		--已审核
-                            --a.FBILLNO IN('XSCKD082471','XSCKD082469')--'XSCKD082458'
                             ORDER BY x1.FNAME,y1.FNAME,a.FDATE
                         ";
             return _result;

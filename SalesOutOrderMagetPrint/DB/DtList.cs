@@ -5,6 +5,10 @@ namespace SalesOutOrderMagetPrint.DB
 {
     public class DtList
     {
+        /// <summary>
+        /// 导出临时表
+        /// </summary>
+        /// <returns></returns>
         public DataTable Get_FinalEmptydt()
         {
             var dt = new DataTable();
@@ -121,7 +125,7 @@ namespace SalesOutOrderMagetPrint.DB
         }
 
         /// <summary>
-        /// 查询窗体临时表
+        /// 查询临时表
         /// </summary>
         /// <returns></returns>
         public DataTable Get_Searchdt()
@@ -134,11 +138,11 @@ namespace SalesOutOrderMagetPrint.DB
                 {
                     case 0:
                         dc.ColumnName = "单据编号";
-                        dc.DataType = Type.GetType("System.String");
+                        dc.DataType = Type.GetType("System.String"); 
                         break;
                     case 1:
                         dc.ColumnName = "单据日期";
-                        dc.DataType = Type.GetType("System.Datetime");
+                        dc.DataType = Type.GetType("System.DateTime"); 
                         break;
                     case 2:
                         dc.ColumnName = "一级客户编码";

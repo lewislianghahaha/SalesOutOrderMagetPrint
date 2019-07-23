@@ -95,7 +95,15 @@ namespace SalesOutOrderMagetPrint
         {
             try
             {
+                if(gvdtl.Rows.Count==0) throw new Exception("没有内容,不能操作");
+                //判断所选行是否超过6
+                if(gvdtl.SelectedRows.Count>6) throw new Exception("所合并的单据行不能超过6行,请重新选择再进行合并打印");
+                //获取并判断所选择的单据行中的“一级客户” 以及 “二级客户”是否一致
+                if(!CheckSameCustomer(gvdtl.SelectedRows))throw new Exception("所选择的单据行中,‘一级客户’或‘二级客户’不一致,请重新选择再继续.");
 
+                //开始执行运算
+                task.TaskId = 1;
+                
             }
             catch (Exception ex)
             {
@@ -361,7 +369,18 @@ namespace SalesOutOrderMagetPrint
             }
         }
 
-
-
+        /// <summary>
+        /// 作用:1)判断所选择的“一级客户”及“二级客户”是否一致 2)
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckSameCustomer(DataGridViewSelectedRowCollection rows)
+        {
+            var result = true;
+            foreach (DataGridViewRow row in rows)
+            {
+                var a = row.Cells[0].Value;
+            }
+            return result;
+        }
     }
 }

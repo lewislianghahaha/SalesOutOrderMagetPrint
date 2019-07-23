@@ -76,13 +76,25 @@ namespace SalesOutOrderMagetPrint.Logic
             {
                 //查询
                 case 0:
-
+                    Searchdt(_fcustname,_scustname,_sdt,_edt);
                     break;
                 //合并打印
                 case 1:
 
                     break;
             }
+        }
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="fcustname"></param>
+        /// <param name="scustname"></param>
+        /// <param name="sdt"></param>
+        /// <param name="edt"></param>
+        private void Searchdt(string fcustname, string scustname, DateTime sdt, DateTime edt)
+        {
+            _resultTable = searchDt.Searchdt(fcustname, scustname, sdt, edt);
         }
 
 
