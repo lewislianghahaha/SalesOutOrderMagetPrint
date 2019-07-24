@@ -20,7 +20,7 @@ namespace SalesOutOrderMagetPrint.DB
                 {
                     case 0:
                         dc.ColumnName = "单据日期";
-                        dc.DataType = Type.GetType("System.DateTime"); 
+                        dc.DataType = Type.GetType("System.String"); 
                         break;
                     case 1:
                         dc.ColumnName = "单据编号";

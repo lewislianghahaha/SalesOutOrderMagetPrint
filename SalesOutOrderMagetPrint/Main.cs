@@ -5,6 +5,7 @@ using System.Threading;
 using System.Windows.Forms;
 using RD.UI;
 using SalesOutOrderMagetPrint.Logic;
+using Stimulsoft.Report;
 
 namespace SalesOutOrderMagetPrint
 {
@@ -12,6 +13,11 @@ namespace SalesOutOrderMagetPrint
     {
         TaskLogic task=new TaskLogic();
         Load load=new Load();
+
+        //记录需合并打印的Fid列表(如:'183711','183872')
+        private string _fidlist;
+        //记录需合并打印的单据名称列表
+        private string _ordlist;
 
         //保存查询出来的GridView记录
         private DataTable _dtl;
@@ -52,7 +58,7 @@ namespace SalesOutOrderMagetPrint
             try
             {
                 task.TaskId = 0;
-                task.Fcustname = txtscustname.Text;
+                task.Fcustname = txtfcustname.Text;
                 task.Scustname = txtscustname.Text;
                 task.Sdt = dps.Value.Date;
                 task.Edt = dpe.Value.Date;
@@ -78,7 +84,8 @@ namespace SalesOutOrderMagetPrint
                     gvdtl.DataSource = task.ResultTable;
                     panel2.Visible = false;
                 }
-
+                //控制GridView单元格显示方式
+                ControlGridViewisShow();
             }
             catch (Exception ex)
             {
@@ -98,12 +105,30 @@ namespace SalesOutOrderMagetPrint
                 if(gvdtl.Rows.Count==0) throw new Exception("没有内容,不能操作");
                 //判断所选行是否超过6
                 if(gvdtl.SelectedRows.Count>6) throw new Exception("所合并的单据行不能超过6行,请重新选择再进行合并打印");
-                //获取并判断所选择的单据行中的“一级客户” 以及 “二级客户”是否一致
-                if(!CheckSameCustomer(gvdtl.SelectedRows))throw new Exception("所选择的单据行中,‘一级客户’或‘二级客户’不一致,请重新选择再继续.");
+                //获取并判断所选择的单据行中的“一级客户编号” 以及 “二级客户编号”是否一致
+                if (!CheckSameCustomer(gvdtl.SelectedRows))throw new Exception("所选择的单据行中,‘一级客户编号’或‘二级客户编号’不一致,请重新选择再继续.");
 
                 //开始执行运算
                 task.TaskId = 1;
-                
+                task.Fidlist = _fidlist;
+                task.Ordlist = _ordlist;
+
+                new Thread(Start).Start();
+                load.StartPosition = FormStartPosition.CenterScreen;
+                load.ShowDialog();
+
+                if (task.ResultTable.Rows.Count==0)throw new Exception("运算异常,请联系管理员");
+                var resultdt = task.ResultTable;
+
+                //调用STI模板并执行导出代码
+                //加载STI模板 SalesOutReport.mrt
+                var filepath = Application.StartupPath + "/Report/SalesOutReport.mrt";
+                var stireport = new StiReport();
+                stireport.Load(filepath);
+                //加载DATASET 或 DATATABLE
+                stireport.RegData("Order", resultdt);
+                stireport.Compile();
+                stireport.Show();   //调用预览功能
             }
             catch (Exception ex)
             {
@@ -370,17 +395,66 @@ namespace SalesOutOrderMagetPrint
         }
 
         /// <summary>
-        /// 作用:1)判断所选择的“一级客户”及“二级客户”是否一致 2)
+        /// 作用:1)判断所选择的“一级客户编号”及“二级客户编号”是否一致 2)循环获取FID值,用,分隔
         /// </summary>
         /// <returns></returns>
         private bool CheckSameCustomer(DataGridViewSelectedRowCollection rows)
         {
             var result = true;
-            foreach (DataGridViewRow row in rows)
+
+            //一级客户编号
+            var fcustcode = string.Empty;
+            //二级客户编号
+            var scustcode = string.Empty;
+
+            try
             {
-                var a = row.Cells[0].Value;
+                //循环检查所选的单据行中‘一级客户编号’及‘二级客户编号’是否一致(注:行与行之间的比较)
+                foreach (DataGridViewRow row in rows)
+                {
+                    //第一行(初始化)时,将第一行的相关值赋给对应的变量内
+                    if (fcustcode == "")
+                    {
+                        fcustcode= Convert.ToString(row.Cells[3].Value);
+                        scustcode = Convert.ToString(row.Cells[5].Value);
+                        _fidlist = "'"+ Convert.ToString(row.Cells[0].Value)+ "'";
+                        _ordlist = Convert.ToString(row.Cells[1].Value);
+                    }
+                    //从第二行开始判断是否值一致
+                    else
+                    {
+                        if (fcustcode == Convert.ToString(row.Cells[3].Value) && scustcode == Convert.ToString(row.Cells[5].Value))
+                        {
+                            fcustcode = Convert.ToString(row.Cells[3].Value);
+                            scustcode = Convert.ToString(row.Cells[5].Value);
+                            _fidlist += ','+ "'"+ Convert.ToString(row.Cells[0].Value)+ "'";
+                            _ordlist +=','+ Convert.ToString(row.Cells[1].Value);
+                        }
+                        //若循环发现不一致,即跳出循环并将相关变量值清空
+                        else
+                        {
+                            result = false;
+                            _fidlist = "";
+                            _ordlist = "";
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                result = false;
             }
             return result;
+        }
+
+        /// <summary>
+        /// 控制GridView单元格显示方式
+        /// </summary>
+        private void ControlGridViewisShow()
+        {
+            //注:当没有值时,若还设置某一行Row不显示的话,就会出现异常
+            gvdtl.Columns[0].Visible = false;
         }
     }
 }

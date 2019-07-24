@@ -11,13 +11,13 @@ namespace SalesOutOrderMagetPrint.Logic
         #region 变量定义
 
         private int _taskid;             //记录中转ID
-        private DataTable _exportdt;     //返回DT(打印模板时使用)
         private string _fcustname;       //获取一级客户名称
         private string _scustname;       //获取二级客户名称
         private DateTime _sdt;           //获取起始单据日期
         private DateTime _edt;           //获取结束单据日期
-
-
+        private string _fidlist;         //获取所选的FID列表
+        private string _ordlist;         //获取所选的单据名称列表
+        
         private DataTable _resultTable;  //返回DT类型
         private bool _resultMark;        //返回是否成功标记
 
@@ -29,10 +29,6 @@ namespace SalesOutOrderMagetPrint.Logic
             /// 中转ID
             /// </summary>
             public int TaskId { set { _taskid = value; } }
-            /// <summary>
-            /// 返回DT(打印模板时使用)
-            /// </summary>
-            public DataTable Exportdt { set { _exportdt = value; } }
 
             /// <summary>
             /// 获取一级客户名称
@@ -53,6 +49,16 @@ namespace SalesOutOrderMagetPrint.Logic
             /// 获取结束单据日期
             /// </summary>
             public DateTime Edt { set { _edt = value; } }
+
+            /// <summary>
+            /// 获取所选的FID列表
+            /// </summary>
+            public string Fidlist { set { _fidlist = value; } }
+
+            /// <summary>
+            /// 获取所选的单据名称列表
+            /// </summary>
+            public string Ordlist { set { _ordlist = value; } }
 
         #endregion
 
@@ -80,7 +86,7 @@ namespace SalesOutOrderMagetPrint.Logic
                     break;
                 //合并打印
                 case 1:
-
+                    Generatedt(_fidlist,_ordlist);
                     break;
             }
         }
@@ -97,7 +103,15 @@ namespace SalesOutOrderMagetPrint.Logic
             _resultTable = searchDt.Searchdt(fcustname, scustname, sdt, edt);
         }
 
-
+        /// <summary>
+        /// 运算及返回供打印使用的DT
+        /// </summary>
+        /// <param name="fidlist">FID列表</param>
+        /// <param name="ordlist">单据名称列表</param>
+        private void Generatedt(string fidlist,string ordlist)
+        {
+            _resultTable = generateDt.GenerDttoExport(fidlist,ordlist);
+        }
 
     }
 }

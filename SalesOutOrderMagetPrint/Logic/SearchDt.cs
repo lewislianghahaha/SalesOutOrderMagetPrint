@@ -43,5 +43,28 @@ namespace SalesOutOrderMagetPrint.Logic
             var sqlcon = new SqlConnection(conn.GetConnectionString());
             return sqlcon;
         }
+
+        /// <summary>
+        /// 根据条件查询明细记录
+        /// </summary>
+        /// <param name="fidlist"></param>
+        /// <returns></returns>
+        public DataTable SearchEntrydt(string fidlist)
+        {
+            var dt=new DataTable();
+
+            try
+            {
+                var sqlscript = sqlList.Get_SalOut(fidlist);
+                var sqlDataAdapter = new SqlDataAdapter(sqlscript, GetConn());
+                sqlDataAdapter.Fill(dt);
+            }
+            catch (Exception)
+            {
+                dt.Columns.Clear();
+                dt.Rows.Clear();
+            }
+            return dt;
+        }
     }
 }
