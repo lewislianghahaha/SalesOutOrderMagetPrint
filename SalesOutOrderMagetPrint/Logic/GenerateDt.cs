@@ -83,23 +83,22 @@ namespace SalesOutOrderMagetPrint.Logic
         {
             var result = string.Empty;
             var temp = string.Empty;
-            var resulttemp = string.Empty;
             var tempid=0;
 
             //外部循环（0:单据日期 1:仓库备注 2:摘要）
-            for (var i = 0; i < 1; i++)
+            for (var i = 0; i < 3; i++)
             {
                 switch (i)
                 {
                     case 0:
-                        tempid = 6;// 0;
+                        tempid = 0;
                         break;
-                    //case 1:
-                    //    tempid = 6;
-                    //    break;
-                    //case 2:
-                    //    tempid = 7;
-                    //    break;
+                    case 1:
+                        tempid = 6;
+                        break;
+                    case 2:
+                        tempid = 7;
+                        break;
                 }
 
                 foreach (DataRow row in dt.Rows)
@@ -108,13 +107,13 @@ namespace SalesOutOrderMagetPrint.Logic
                     if (temp == "" && Convert.ToString(row[tempid]) !="")
                     {
                         temp = Convert.ToString(row[tempid])+";";
-                       // resulttemp = Convert.ToString(row[tempid]) + ";";
                     }
                     else
                     {
-                        var a = Convert.ToString(row[tempid]);
-                        //
-                        if (temp.ToLower().Contains(Convert.ToString(row[tempid])))
+                        //将获取的值进行去空格及大写控制
+                        var value = Convert.ToString(row[tempid]).Replace(" ", "").ToLower()+";";
+                        //判断是否存在
+                        if (temp.Replace(" ", "").ToLower().Contains(value) || Convert.ToString(row[tempid])=="")
                         {
                             continue;
                         }
@@ -122,13 +121,11 @@ namespace SalesOutOrderMagetPrint.Logic
                         {
                             temp += Convert.ToString(row[tempid]) + ";";
                         }
-                       // resulttemp += Convert.ToString(row[tempid]) + ";";
                     }
                 }
                 result += temp + "|";
                 //将相关中转变量清空
                 temp = "";
-                //resulttemp = "";
             }
             return result;
         }
