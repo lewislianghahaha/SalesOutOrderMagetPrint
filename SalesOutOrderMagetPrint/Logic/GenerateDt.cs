@@ -37,7 +37,6 @@ namespace SalesOutOrderMagetPrint.Logic
                     for (var j = 0; j < dt.Columns.Count; j++)
                     {
                         //当列ID分别为0(单据日期) 1(单据编号) 6(仓库备注) 7(摘要)作特别处理;其它按正常赋值操作
-
                         switch (j)
                         {
                             case 0:
@@ -47,10 +46,10 @@ namespace SalesOutOrderMagetPrint.Logic
                                 rowdtl[j] = Convert.ToString(ordlist);
                                 break;
                             case 6:
-                                rowdtl[j] = strsplit[1];
+                                rowdtl[j] = strsplit.Length > 2 ? strsplit[1] : "";
                                 break;
                             case 7:
-                                rowdtl[j] = strsplit[2];
+                                rowdtl[j] = strsplit.Length > 3 ? strsplit[2] : "";
                                 break;
                             default:
                                 rowdtl[j] = dt.Rows[i][j];
@@ -86,7 +85,7 @@ namespace SalesOutOrderMagetPrint.Logic
             var tempid=0;
 
             //外部循环（0:单据日期 1:仓库备注 2:摘要）
-            for (var i = 0; i < 1; i++)
+            for (var i = 0; i < 3; i++)
             {
                 switch (i)
                 {
