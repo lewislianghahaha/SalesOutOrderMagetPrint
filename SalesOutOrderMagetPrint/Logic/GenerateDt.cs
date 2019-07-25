@@ -86,7 +86,7 @@ namespace SalesOutOrderMagetPrint.Logic
             var tempid=0;
 
             //外部循环（0:单据日期 1:仓库备注 2:摘要）
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 1; i++)
             {
                 switch (i)
                 {
@@ -104,22 +104,26 @@ namespace SalesOutOrderMagetPrint.Logic
                 foreach (DataRow row in dt.Rows)
                 {
                     //单据日期相同合并;用“;”分隔
-                    if (temp == "" && Convert.ToString(row[tempid]) !="")
+                    if (temp == "" && Convert.ToString(row[tempid]).Replace(" ","") !="")
                     {
                         temp = Convert.ToString(row[tempid])+";";
                     }
                     else
                     {
-                        //将获取的值进行去空格及大写控制
-                        var value = Convert.ToString(row[tempid]).Replace(" ", "").ToLower()+";";
-                        //判断是否存在
-                        if (temp.Replace(" ", "").ToLower().Contains(value) || Convert.ToString(row[tempid])=="")
+                        //若从DT中获取的值为空,就不能继续
+                        if (Convert.ToString(row[tempid]).Replace(" ","") != "")
                         {
-                            continue;
-                        }
-                        else
-                        {
-                            temp += Convert.ToString(row[tempid]) + ";";
+                            //将获取的值进行去空格及大写控制
+                            var value = Convert.ToString(row[tempid]).Replace(" ", "").ToLower() + ";";
+                            //判断是否存在
+                            if (temp.Replace(" ", "").ToLower().Contains(value))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                temp += Convert.ToString(row[tempid]) + ";";
+                            }
                         }
                     }
                 }

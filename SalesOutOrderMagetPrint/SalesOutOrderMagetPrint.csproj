@@ -141,6 +141,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\SalesOutOrderMagetPrint.vshost.exe" />
+    <Content Include="DLL\Stimulsoft.Base.dll" />
+    <Content Include="DLL\Stimulsoft.Controls.dll" />
+    <Content Include="DLL\Stimulsoft.Controls.Win.dll" />
+    <Content Include="DLL\Stimulsoft.Database.dll" />
+    <Content Include="DLL\Stimulsoft.Design.dll" />
+    <Content Include="DLL\Stimulsoft.Editor.dll" />
+    <Content Include="DLL\Stimulsoft.Report.Check.dll" />
+    <Content Include="DLL\Stimulsoft.Report.Design.dll" />
+    <Content Include="DLL\Stimulsoft.Report.dll" />
+    <Content Include="DLL\Stimulsoft.Report.Helper.dll" />
+    <Content Include="DLL\Stimulsoft.Report.Web.dll" />
+    <Content Include="DLL\Stimulsoft.Report.Win.dll" />
     <Content Include="obj\Debug\SalesOutOrderMagetPrint.csproj.FileListAbsolute.txt" />
   </ItemGroup>
   <ItemGroup>
