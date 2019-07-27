@@ -57,35 +57,7 @@ namespace SalesOutOrderMagetPrint
         {
             try
             {
-                task.TaskId = 0;
-                task.Fcustname = txtfcustname.Text;
-                task.Scustname = txtscustname.Text;
-                task.Sdt = dps.Value.Date;
-                task.Edt = dpe.Value.Date;
-
-                new Thread(Start).Start();
-                load.StartPosition = FormStartPosition.CenterScreen;
-                load.ShowDialog();
-
-                if (task.ResultTable.Rows.Count > 0)
-                {
-                    _dtl = task.ResultTable;
-                    panel2.Visible = true;
-                    //初始化下拉框所选择的默认值
-                    tmshowrows.SelectedItem = "10";
-                    //定义初始化标记
-                    _pageChange = true;
-                    //GridView分页
-                    GridViewPageChange();
-                }
-                //注:当为空记录时,不显示跳转页;只需将临时表赋值至GridView内
-                else
-                {
-                    gvdtl.DataSource = task.ResultTable;
-                    panel2.Visible = false;
-                }
-                //控制GridView单元格显示方式
-                ControlGridViewisShow();
+                OnSearch();
             }
             catch (Exception ex)
             {
@@ -117,18 +89,25 @@ namespace SalesOutOrderMagetPrint
                 load.StartPosition = FormStartPosition.CenterScreen;
                 load.ShowDialog();
 
-                if (task.ResultTable.Rows.Count==0)throw new Exception("运算异常,请联系管理员");
-                var resultdt = task.ResultTable;
+                if (task.ResultTable.Rows.Count == 0) throw new Exception("运算异常,请联系管理员");
+                else
+                {
+                    var resultdt = task.ResultTable;
 
-                //调用STI模板并执行导出代码
-                //加载STI模板 SalesOutReport.mrt
-                var filepath = Application.StartupPath + "/Report/SalesOutReport.mrt";
-                var stireport = new StiReport();
-                stireport.Load(filepath);
-                //加载DATASET 或 DATATABLE
-                stireport.RegData("Order", resultdt);
-                stireport.Compile();
-                stireport.Show();   //调用预览功能
+                    //调用STI模板并执行导出代码
+                    //加载STI模板 SalesOutReport.mrt
+                    var filepath = Application.StartupPath + "/Report/SalesOutReport.mrt";
+                    var stireport = new StiReport();
+                    stireport.Load(filepath);
+                    //加载DATASET 或 DATATABLE
+                    stireport.RegData("Order", resultdt);
+                    stireport.Compile();
+                    stireport.Show();   //调用预览功能
+                    //执行对所选择进行打印的单据更新“打印日期”及“打印次数”
+                    OnUpdate(_fidlist);
+                    //完成后刷新“查询”按钮
+                    OnSearch();
+                }
             }
             catch (Exception ex)
             {
@@ -456,5 +435,53 @@ namespace SalesOutOrderMagetPrint
             //注:当没有值时,若还设置某一行Row不显示的话,就会出现异常
             gvdtl.Columns[0].Visible = false;
         }
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        void OnSearch()
+        {
+            task.TaskId = 0;
+            task.Fcustname = txtfcustname.Text;
+            task.Scustname = txtscustname.Text;
+            task.Sdt = dps.Value.Date;
+            task.Edt = dpe.Value.Date;
+
+            new Thread(Start).Start();
+            load.StartPosition = FormStartPosition.CenterScreen;
+            load.ShowDialog();
+
+            if (task.ResultTable.Rows.Count > 0)
+            {
+                _dtl = task.ResultTable;
+                panel2.Visible = true;
+                //初始化下拉框所选择的默认值
+                tmshowrows.SelectedItem = "10";
+                //定义初始化标记
+                _pageChange = true;
+                //GridView分页
+                GridViewPageChange();
+            }
+            //注:当为空记录时,不显示跳转页;只需将临时表赋值至GridView内
+            else
+            {
+                gvdtl.DataSource = task.ResultTable;
+                panel2.Visible = false;
+            }
+            //控制GridView单元格显示方式
+            ControlGridViewisShow();
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        bool OnUpdate(string fidlist)
+        {
+            task.TaskId = 2;
+            task.Fidlist = fidlist;
+            task.StartTask();
+            return task.ResultMark;
+        }
+
     }
 }

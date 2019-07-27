@@ -91,7 +91,7 @@ namespace SalesOutOrderMagetPrint.DB
 	                               x.FNUMBER 一级客户编码,x1.FNAME 一级客户名称,
 	                               y.FNUMBER 二级客户编码,y1.FNAME 二级客户名称,
 	                               z1.FNAME 客服员,h1.FNAME 销售部门,h4.FNAME 销售业务员,z4.FNAME 仓管员,
-	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要
+	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要,a.F_YTC_PRINTTIMES 打印次数,a.F_YTC_PRINTDATETIME 最后打印日期
 
                             FROM dbo.T_SAL_OUTSTOCK a
                             INNER JOIN dbo.T_BD_CUSTOMER x ON a.FCUSTOMERID=x.FCUSTID
@@ -131,7 +131,7 @@ namespace SalesOutOrderMagetPrint.DB
 	                               x.FNUMBER 一级客户编码,x1.FNAME 一级客户名称,
 	                               y.FNUMBER 二级客户编码,y1.FNAME 二级客户名称,
 	                               z1.FNAME 客服员,h1.FNAME 销售部门,h4.FNAME 销售业务员,z4.FNAME 仓管员,
-	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要
+	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要,a.F_YTC_PRINTTIMES 打印次数,a.F_YTC_PRINTDATETIME 最后打印日期
 
                             FROM dbo.T_SAL_OUTSTOCK a
                             INNER JOIN dbo.T_BD_CUSTOMER x ON a.FCUSTOMERID=x.FCUSTID
@@ -172,7 +172,7 @@ namespace SalesOutOrderMagetPrint.DB
 	                               x.FNUMBER 一级客户编码,x1.FNAME 一级客户名称,
 	                               y.FNUMBER 二级客户编码,y1.FNAME 二级客户名称,
 	                               z1.FNAME 客服员,h1.FNAME 销售部门,h4.FNAME 销售业务员,z4.FNAME 仓管员,
-	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要
+	                               a.F_YTC_REMARKS2 仓库备注,a.F_YTC_TEXT1 摘要,a.F_YTC_PRINTTIMES 打印次数,a.F_YTC_PRINTDATETIME 最后打印日期
 
                             FROM dbo.T_SAL_OUTSTOCK a
                             INNER JOIN dbo.T_BD_CUSTOMER x ON a.FCUSTOMERID=x.FCUSTID
@@ -205,6 +205,24 @@ namespace SalesOutOrderMagetPrint.DB
                             ORDER BY x1.FNAME,y1.FNAME,a.FDATE
                         ";
             }
+            return _result;
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <returns></returns>
+        public string Updatedt(string fidlist)
+        {
+            _result = $@"
+                            UPDATE dbo.T_SAL_OUTSTOCK SET F_YTC_PRINTTIMES=a.累加打印次数,F_YTC_PRINTDATETIME=GETDATE()
+                            FROM dbo.T_SAL_OUTSTOCK
+                            INNER JOIN (
+				                            SELECT a1.FID,ISNULL(a1.F_YTC_PRINTTIMES,0)+1 累加打印次数
+				                            FROM dbo.T_SAL_OUTSTOCK a1
+				                            WHERE a1.FID IN ({fidlist})
+			                            )AS a ON dbo.T_SAL_OUTSTOCK.FID=a.FID
+                        ";
             return _result;
         }
     }

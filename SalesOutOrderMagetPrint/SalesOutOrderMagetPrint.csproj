@@ -93,6 +93,7 @@
       <DependentUpon>Load.cs</DependentUpon>
     </Compile>
     <Compile Include="Logic\GenerateDt.cs" />
+    <Compile Include="Logic\ImportDt.cs" />
     <Compile Include="Logic\SearchDt.cs" />
     <Compile Include="Logic\TaskLogic.cs" />
     <Compile Include="Main.cs">

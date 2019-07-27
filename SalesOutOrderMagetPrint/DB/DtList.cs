@@ -180,6 +180,14 @@ namespace SalesOutOrderMagetPrint.DB
                         dc.ColumnName = "摘要";
                         dc.DataType = Type.GetType("System.String");
                         break;
+                    case 11:
+                        dc.ColumnName = "打印次数";
+                        dc.DataType = Type.GetType("System.Int32"); 
+                        break;
+                    case 12:
+                        dc.ColumnName = "最后打印日期";
+                        dc.DataType = Type.GetType("System.DateTime"); 
+                        break;
                 }
                 dt.Columns.Add(dc);
             }

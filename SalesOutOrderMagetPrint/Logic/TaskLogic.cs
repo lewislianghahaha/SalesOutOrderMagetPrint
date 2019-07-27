@@ -7,6 +7,7 @@ namespace SalesOutOrderMagetPrint.Logic
     {
         SearchDt searchDt=new SearchDt();
         GenerateDt generateDt=new GenerateDt();
+        ImportDt importDt=new ImportDt();
 
         #region 变量定义
 
@@ -88,6 +89,10 @@ namespace SalesOutOrderMagetPrint.Logic
                 case 1:
                     Generatedt(_fidlist,_ordlist);
                     break;
+                //更新操作
+                case 2:
+                    Updatedt(_fidlist);
+                    break;
             }
         }
 
@@ -111,6 +116,15 @@ namespace SalesOutOrderMagetPrint.Logic
         private void Generatedt(string fidlist,string ordlist)
         {
             _resultTable = generateDt.GenerDttoExport(fidlist,ordlist);
+        }
+
+        /// <summary>
+        /// 更新
+        /// </summary>
+        /// <param name="fidlist"></param>
+        private void Updatedt(string fidlist)
+        {
+            _resultMark = importDt.UpdateRecord(fidlist);
         }
 
     }
