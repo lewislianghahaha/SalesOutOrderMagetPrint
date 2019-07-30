@@ -28,17 +28,18 @@ namespace SalesOutOrderMagetPrint.DB
 	                            d.FSPECIFICATION 规格型号,
 	                            z.FNUMBER 批号,
 	                            Convert(decimal(18,0),b.FREALQTY) 实发数量,
-	                            f.FDATAVALUE 定制,
+	                            ISNULL(f.FDATAVALUE,'') 定制,
 	                            b.FNOTE 备注,
-	                            CONVERT(DECIMAL(18,2),b.F_YTC_DECIMAL) 包装件数
+	                            CONVERT(DECIMAL(18,2),b.F_YTC_DECIMAL) 包装件数,
+                                a.FBILLNO 单据编号明细
 
                         FROM dbo.T_SAL_OUTSTOCK a
                         INNER JOIN dbo.T_SAL_OUTSTOCKENTRY b ON a.FID=b.FID
 
                         INNER JOIN dbo.T_BD_MATERIAL c ON b.FMATERIALID=c.FMATERIALID
                         INNER JOIN dbo.T_BD_MATERIAL_L d ON c.FMATERIALID=d.FMATERIALID
-                        INNER JOIN T_BAS_ASSISTANTDATAENTRY e ON c.F_YTC_ASSISTANT1111=e.FENTRYID
-                        INNER JOIN dbo.T_BAS_ASSISTANTDATAENTRY_L f ON e.FENTRYID=f.FENTRYID
+                        LEFT JOIN T_BAS_ASSISTANTDATAENTRY e ON c.F_YTC_ASSISTANT1111=e.FENTRYID
+                        LEFT JOIN dbo.T_BAS_ASSISTANTDATAENTRY_L f ON e.FENTRYID=f.FENTRYID
 
                         INNER JOIN dbo.T_BD_CUSTOMER x ON a.FCUSTOMERID=x.FCUSTID
                         INNER JOIN dbo.T_BD_CUSTOMER_L x1 ON x.FCUSTID=x1.FCUSTID
@@ -68,7 +69,7 @@ namespace SalesOutOrderMagetPrint.DB
 
                         WHERE a.fid in({fidlist}) --'XSCKD082458'--'XSCKD082471'
                         and (LEN(d.FNAME)>0)
-                        ORDER BY b.FMATERIALID";
+                        ORDER BY a.fid,b.FMATERIALID";
 
             return _result;
         }

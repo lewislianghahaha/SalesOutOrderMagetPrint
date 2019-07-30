@@ -57,10 +57,10 @@ namespace SalesOutOrderMagetPrint.Logic
                         }
                     }
 
-                    //每行对DT赋值完成后,最后对6个存放条码字段的列进行循环赋值(注:从列ID 19开始，截止至24)
+                    //每行对DT赋值完成后,最后对6个存放条码字段的列进行循环赋值(注:从列ID 20开始，截止至25)
                     for (var x = 0; x < ordersplit.Length; x++)
                     {
-                        rowdtl[18 + x + 1] = ordersplit[x];
+                        rowdtl[19 + x + 1] = ordersplit[x];
                     }
                     resultdt.Rows.Add(rowdtl);
                 }

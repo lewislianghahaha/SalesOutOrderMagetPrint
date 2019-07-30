@@ -12,7 +12,7 @@ namespace SalesOutOrderMagetPrint.DB
         public DataTable Get_FinalEmptydt()
         {
             var dt = new DataTable();
-            for (var i = 0; i < 25; i++)
+            for (var i = 0; i < 26; i++)
             {
                 var dc = new DataColumn();
 
@@ -95,26 +95,30 @@ namespace SalesOutOrderMagetPrint.DB
                         dc.DataType = Type.GetType("System.Decimal");
                         break;
                     case 19:
+                        dc.ColumnName = "单据编号明细";
+                        dc.DataType=Type.GetType("System.String"); 
+                        break;
+                    case 20:
                         dc.ColumnName = "Code1";
                         dc.DataType = Type.GetType("System.String");
                         break;
-                    case 20:
+                    case 21:
                         dc.ColumnName = "Code2";
                         dc.DataType = Type.GetType("System.String");
                         break;
-                    case 21:
+                    case 22:
                         dc.ColumnName = "Code3";
                         dc.DataType = Type.GetType("System.String");
                         break;
-                    case 22:
+                    case 23:
                         dc.ColumnName = "Code4";
                         dc.DataType = Type.GetType("System.String");
                         break;
-                    case 23:
+                    case 24:
                         dc.ColumnName = "Code5";
                         dc.DataType = Type.GetType("System.String");
                         break;
-                    case 24:
+                    case 25:
                         dc.ColumnName = "Code6";
                         dc.DataType = Type.GetType("System.String");
                         break;
