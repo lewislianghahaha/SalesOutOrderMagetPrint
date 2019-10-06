@@ -122,6 +122,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="bin\Debug\Report\SalesOutReport.mrt" />
+    <None Include="bin\Debug\Report\SalesOutReport_bak.mrt" />
     <None Include="bin\Debug\SalesOutOrderMagetPrint.exe.config" />
     <None Include="bin\Debug\SalesOutOrderMagetPrint.vshost.exe.config" />
     <None Include="bin\Debug\SalesOutOrderMagetPrint.vshost.exe.manifest" />
