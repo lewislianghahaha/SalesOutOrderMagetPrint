@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Stimulsoft.Base">
       <HintPath>DLL\Stimulsoft.Base.dll</HintPath>
@@ -156,6 +159,7 @@
     <Content Include="DLL\Stimulsoft.Report.Helper.dll" />
     <Content Include="DLL\Stimulsoft.Report.Web.dll" />
     <Content Include="DLL\Stimulsoft.Report.Win.dll" />
+    <Content Include="Logo.ico" />
     <Content Include="obj\Debug\SalesOutOrderMagetPrint.csproj.FileListAbsolute.txt" />
   </ItemGroup>
   <ItemGroup>
